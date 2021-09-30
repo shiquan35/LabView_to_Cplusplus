@@ -1,0 +1,6 @@
+﻿main.obj : error LNK2019: unresolved external symbol __imp__fftw_execute referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp__fftw_plan_dft_1d referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp__fftw_destroy_plan referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp__fftw_cleanup referenced in function _main
+C:\Users\ongsh\source\repos\16 Sept CAMERA\Dependencies\lib\libfftw3-3.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\ongsh\source\repos\16 Sept CAMERA\Debug\16 Sept CAMERA.exe : fatal error LNK1120: 4 unresolved externals
