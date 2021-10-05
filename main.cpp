@@ -201,6 +201,32 @@ int main()
 			//imgPlot(window, NULL, left_buff_offset, top_buff_offset, xsize, ysize, xpos, ypos, flags);
 
 
+			// 30 sept 2021: try GRAB
+			// 1. imgInterfaceOpen ()
+			// 2. imgSessionOpen ()
+			// 3. imgGrabSetup ()
+			// 4. imgSessionStartAcquisition ()
+			// 5. imgGrab (X)
+			// 6. User specific functions
+			// 7. imgSessionStop Acquisition (X)
+			// 8. imgClose ()
+
+			//3. imgGrabSetup
+			imgGrabSetup(sessionID, TRUE); //manually start acquisition with imgSessionStartAcquisition
+
+			//4. imgSessionStartAcquisition
+			imgSessionStartAcquisition(sessionID);
+
+			//5. imgGrab (sessionID, buffer address, uint32 waitForNext)
+			imgGrab(sessionID, NULL, TRUE);
+
+
+			//6. functions or display using imgPlot
+
+
+			//7. imgSessionStop Acquisition
+			imgSessionStopAcquisition(sessionID);
+
 			imgClose(sessionID, FALSE);	// closes the session using the imgClose function
 			std::cout << "Session is closed" << std::endl;
 
