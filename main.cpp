@@ -4,16 +4,23 @@
 #include <math.h>
 #include <complex>
 #include <iomanip>
-
+#include <windows.h>
 #include "NIIMAQ/niimaq.h"
 #include "NIIMAQ/niimaq_errors.h"
 #include "NIIMAQ/niimaq_errors_legacy.h"
 
 #include "fftw/fftw3.h"
 
-#include <pbPlots.hpp>
+//#include <pbPlots.hpp>   cannot run <windows.h> alongside <pbPlots.hpp>
 #include <supportLib.hpp>
 #define N 16
+
+
+static HWND ImaqSmplHwnd;
+static Int32 AcqWinWidth;
+static Int32 AcqWinHeight;
+static Int32 CanvasTop = 10;     // top of the display area
+static Int32 CanvasLeft = 10;    // left of the display area
 
 /* IMAQ runs in x86
    fftw runs in x64(?)
@@ -24,7 +31,7 @@
 /* REOPEN LINE 49
 int main()
 {
-	
+
 	// structure to hold the image
 	RGBABitmapImageReference* imageRef = CreateRGBABitmapImageReference();
 	RGBABitmapImageReference* imageRef2 = CreateRGBABitmapImageReference();
@@ -33,14 +40,14 @@ int main()
 	std::vector <double> b; // y coordinate of FFT
 	std::vector <double> c; // x coordinate of signal
 	std::vector <double> d; // y coordinate of signal
-	
 
 
-	
+
+
 	// CORRECT COSINE WAVE 16 SEPT
 	//std::cout << 'x' << "\t";
 	//std::cout << 'y' << "\t" << std::endl;
-	
+
 	for (int f = 0; f < 361; ++f)
 	{
 		c.push_back(f); // c: 0-360
@@ -100,8 +107,8 @@ int main()
 	{
 		printf("freq: %3d %+9.5f %+9.5f I\n", i, out[i][0], out[i][1]);
 	}
-		
-	
+
+
 	fftw_destroy_plan(p);
 
 	std::cout << "out[3][0] is: " << out[3][0] << std::endl;
@@ -115,7 +122,7 @@ int main()
 
 		std::cout << a[f] << "\t";
 		std::cout << b[f] << std::endl;
-		
+
 	}
 	std::cout << "test end" << std::endl;
 
@@ -126,7 +133,7 @@ int main()
 	std::cout << "Bar Plot Created" << std::endl;
 	DeleteImage(imageRef->image);
 
-	
+
 	// backward Fourier transform, save the result in 'in2'
 	printf("\nInverse transform:\n");
 	q = fftw_plan_dft_1d(N, out, in2, FFTW_BACKWARD, FFTW_ESTIMATE);
@@ -143,11 +150,12 @@ int main()
 
 	fftw_cleanup();
 	return 0;
-	
+
 }
 */
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // run IMAQ in x86
 int main()
@@ -156,6 +164,8 @@ int main()
 	INTERFACE_ID interfaceID;
 
 	SESSION_ID sessionID;
+
+	unsigned int bitsPerPixel, plotFlag;
 
 	if (imgInterfaceOpen("img0", &interfaceID) == IMG_ERR_GOOD) // "img0" is interfacename, opens an interface named img0
 
@@ -200,16 +210,15 @@ int main()
 			//uInt32 left_buff_offset, top_buff_offset, xsize, ysize, xpos, ypos, flags = 1000;
 			//imgPlot(window, NULL, left_buff_offset, top_buff_offset, xsize, ysize, xpos, ypos, flags);
 
-
 			// 30 sept 2021: try GRAB
-			// 1. imgInterfaceOpen ()
-			// 2. imgSessionOpen ()
-			// 3. imgGrabSetup ()
-			// 4. imgSessionStartAcquisition ()
-			// 5. imgGrab (X)
+			// 1. imgInterfaceOpen (DONE)
+			// 2. imgSessionOpen (DONE)
+			// 3. imgGrabSetup (DONE)
+			// 4. imgSessionStartAcquisition (DONE)
+			// 5. imgGrab (DONE)
 			// 6. User specific functions
-			// 7. imgSessionStop Acquisition (X)
-			// 8. imgClose ()
+			// 7. imgSessionStop Acquisition (DONE)
+			// 8. imgClose (DONE)
 
 			//3. imgGrabSetup
 			imgGrabSetup(sessionID, TRUE); //manually start acquisition with imgSessionStartAcquisition
@@ -221,19 +230,55 @@ int main()
 			imgGrab(sessionID, NULL, TRUE);
 
 
-			//6. functions or display using imgPlot
+			// get attributes to get pixel depth of camera
+			imgGetAttribute(sessionID, IMG_ATTR_BITSPERPIXEL, &bitsPerPixel); // obtain pixel depth, then store in bitsPerPixel
 
+			// declare plotFlag according to pixel depth, bitsPerPixel
+			switch (bitsPerPixel)
+			{
+			case 10:
+				plotFlag = IMGPLOT_MONO_10;
+				break;
+			case 12:
+				plotFlag = IMGPLOT_MONO_12;
+				break;
+			case 14:
+				plotFlag = IMGPLOT_MONO_14;
+				break;
+			case 16:
+				plotFlag = IMGPLOT_MONO_16;
+				break;
+			case 24:
+			case 32:
+				// assumes that a 24 bits camera is a color camera.
+				// in this mode, even if the camera is 24 bits the board returns 32 bits values
+				plotFlag = IMGPLOT_COLOR_RGB32;
+				break;
+			default:
+				plotFlag = IMGPLOT_MONO_8;
+				break;
+			}
+
+			//6. functions or display using imgPlot (1. GUIHNDL window, 2. void* buffer, 3. uInt32 leftBufOffset, 4. uInt32 topBufOffset, 5. uInt32 xsize, 6. uInt32 ysize, 
+			// 7. uInt32 xpos, 8. uInt32 ypos, 9. uInt32 flags)
+
+
+			//            1          2   3  4      5              6           7           8          9
+			imgPlot2(ImaqSmplHwnd, NULL, 0, 0, AcqWinWidth, AcqWinHeight, CanvasLeft, CanvasTop, plotFlag);
+
+			return 0;
 
 			//7. imgSessionStop Acquisition
-			imgSessionStopAcquisition(sessionID);
+			//imgSessionStopAcquisition(sessionID);
 
-			imgClose(sessionID, FALSE);	// closes the session using the imgClose function
-			std::cout << "Session is closed" << std::endl;
+
+			//imgClose(sessionID, FALSE);	// closes the session using the imgClose function
+			//std::cout << "Session is closed" << std::endl;
 
 		}
 
-		imgClose(interfaceID, FALSE);	// closes the interface using the imgClose function
-		std::cout << "Interface is closed" << std::endl;
+		//imgClose(interfaceID, FALSE);	// closes the interface using the imgClose function
+		//std::cout << "Interface is closed" << std::endl;
 
 	}
 }

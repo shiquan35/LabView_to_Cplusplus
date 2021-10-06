@@ -1,7 +1,7 @@
 # LabView_to_Cplusplus
 Code migration 
 
+This is the main branch.\
 
-test commit 1oct2021\
-5oct 2021 new com\
-This is the main branch
+6 Oct: added imgGrab and imgPlot\
+(no image output)
