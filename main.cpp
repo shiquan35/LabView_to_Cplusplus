@@ -18,7 +18,7 @@ static Int32 CanvasLeft = 10;    // left of the display area
 
 
 
-// THIS IS LOCAL, NOT GITHUB
+// THIS IS GITHUB
 // run IMAQ in x86
 
 
