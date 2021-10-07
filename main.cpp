@@ -18,10 +18,10 @@ static Int32 CanvasLeft = 10;    // left of the display area
 
 
 
-// THIS IS GITHUB
+// THIS IS LOCAL, NOT GITHUB
 // run IMAQ in x86
 
-
+/*
 int main()
 
 {
@@ -94,7 +94,7 @@ int main()
 				break;
 			}
 			std::cout << "plotFlag obtained" << std::endl;
-			//6. functions or display using imgPlot (1. GUIHNDL window, 2. void* buffer, 3. uInt32 leftBufOffset, 4. uInt32 topBufOffset, 5. uInt32 xsize, 6. uInt32 ysize, 
+			//6. functions or display using imgPlot (1. GUIHNDL window, 2. void* buffer, 3. uInt32 leftBufOffset, 4. uInt32 topBufOffset, 5. uInt32 xsize, 6. uInt32 ysize,
 			// 7. uInt32 xpos, 8. uInt32 ypos, 9. uInt32 flags)
 
 
@@ -105,7 +105,7 @@ int main()
 			//7. imgSessionStop Acquisition
 			imgSessionStopAcquisition(sessionID);
 			std::cout << "Stop acquisition" << std::endl;
-			
+
 			imgClose(sessionID, FALSE);	// closes the session using the imgClose function
 			std::cout << "Session is closed" << std::endl;
 
@@ -114,5 +114,54 @@ int main()
 		imgClose(interfaceID, FALSE);	// closes the interface using the imgClose function
 		std::cout << "Interface is closed" << std::endl;
 
+	}
+}
+
+*/
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+// 2.  this is the window event callback function from line 15  , first paramater is window handler
+LRESULT CALLBACK WindowProcessMessages(HWND hwnd, UINT msg, WPARAM param, LPARAM lparam);
+
+// this is the main function
+int WINAPI WinMain(HINSTANCE currentInstance, HINSTANCE previousInstance, LPSTR cmdLine, INT cmdCount) {
+
+	// 1. Register the window class
+	const char* CLASS_NAME = "myWin32WindowClass";
+	WNDCLASS wc{};
+	wc.hInstance = currentInstance;
+	wc.lpszClassName = CLASS_NAME;
+	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
+	wc.lpfnWndProc = WindowProcessMessages; // every window requires a programmer defined callback function that is called by the OS when an event happens ie. close window, click inside window
+	RegisterClass(&wc);
+
+	// 3.  Create the window
+	CreateWindow(CLASS_NAME, "Win32 Tutorial",
+		WS_OVERLAPPEDWINDOW | WS_VISIBLE,			// Window style
+		CW_USEDEFAULT, CW_USEDEFAULT,				// Window initial position
+		800, 600,						// Window size
+		nullptr, nullptr, nullptr, nullptr);
+
+	//  4. Lastly,    Window loop - all graphical applications need a loop that runs until application is closed 
+	MSG msg{}; // empty window message, while loop runs as long as GetMessage returns TRUE
+	while (GetMessage(&msg, nullptr, 0, 0)) {
+		TranslateMessage(&msg);
+		//return MessageBox(NULL, "hello, world", "caption", 0);
+		DispatchMessage(&msg);
+	}
+
+	return 0;
+}
+
+// 2. 
+LRESULT CALLBACK WindowProcessMessages(HWND hwnd, UINT msg, WPARAM param, LPARAM lparam) {
+	switch (msg) {
+	case WM_DESTROY: //user pressed cross button at top right corner
+		PostQuitMessage(0);
+		return 0;
+	default:
+		return DefWindowProc(hwnd, msg, param, lparam);
 	}
 }
