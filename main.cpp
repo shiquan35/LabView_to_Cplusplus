@@ -229,10 +229,15 @@ int main()
 			//5. imgGrab (sessionID, buffer address, uint32 waitForNext)
 			imgGrab(sessionID, NULL, TRUE);
 
+			// imgSessionSaveBufferEx to save a buffer of a session to PNG
+			imgSessionSaveBufferEx(sessionID, NULL, reinterpret_cast<Int8*>(const_cast<char*>("test.png")));
+			std::cout << "Image saved" << std::endl;
+
+
 
 			// get attributes to get pixel depth of camera
 			imgGetAttribute(sessionID, IMG_ATTR_BITSPERPIXEL, &bitsPerPixel); // obtain pixel depth, then store in bitsPerPixel
-
+			std::cout << "Get Attribute" << std::endl;
 			// declare plotFlag according to pixel depth, bitsPerPixel
 			switch (bitsPerPixel)
 			{
@@ -258,27 +263,26 @@ int main()
 				plotFlag = IMGPLOT_MONO_8;
 				break;
 			}
-
+			std::cout << "plotFlag obtained" << std::endl;
 			//6. functions or display using imgPlot (1. GUIHNDL window, 2. void* buffer, 3. uInt32 leftBufOffset, 4. uInt32 topBufOffset, 5. uInt32 xsize, 6. uInt32 ysize, 
 			// 7. uInt32 xpos, 8. uInt32 ypos, 9. uInt32 flags)
 
 
 			//            1          2   3  4      5              6           7           8          9
 			imgPlot2(ImaqSmplHwnd, NULL, 0, 0, AcqWinWidth, AcqWinHeight, CanvasLeft, CanvasTop, plotFlag);
-
-			return 0;
+			std::cout << "imgPlot2 done" << std::endl;
 
 			//7. imgSessionStop Acquisition
-			//imgSessionStopAcquisition(sessionID);
+			imgSessionStopAcquisition(sessionID);
+			std::cout << "Stop acquisition" << std::endl;
 
-
-			//imgClose(sessionID, FALSE);	// closes the session using the imgClose function
-			//std::cout << "Session is closed" << std::endl;
+			imgClose(sessionID, FALSE);	// closes the session using the imgClose function
+			std::cout << "Session is closed" << std::endl;
 
 		}
 
-		//imgClose(interfaceID, FALSE);	// closes the interface using the imgClose function
-		//std::cout << "Interface is closed" << std::endl;
+		imgClose(interfaceID, FALSE);	// closes the interface using the imgClose function
+		std::cout << "Interface is closed" << std::endl;
 
 	}
 }
