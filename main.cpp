@@ -1,3 +1,5 @@
+// THIS IS GITHUB
+
 #include <iostream>
 #include <vector>
 #define _USE_MATH_DEFINES
@@ -18,7 +20,7 @@ static Int32 CanvasLeft = 10;    // left of the display area
 
 
 
-// THIS IS LOCAL, NOT GITHUB
+
 // run IMAQ in x86
 
 /*
