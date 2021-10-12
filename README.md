@@ -1,9 +1,9 @@
 # LabView_to_Cplusplus
 
-Subsystem: Windows
+Subsystem: Windows\
 Solution: x86
 
 Main function: WINAPI
 
-IMAQ functions are called within WINAPI
+IMAQ functions are called from WINAPI CALLBACK
 
