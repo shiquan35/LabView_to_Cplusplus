@@ -1,5 +1,9 @@
 # LabView_to_Cplusplus
-Code migration 
 
+Subsystem: Windows
+Solution: x86
 
-cheeck check checkkk
+Main function: WINAPI
+
+IMAQ functions are called within WINAPI
+
