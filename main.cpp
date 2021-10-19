@@ -12,7 +12,7 @@
 #include "NIIMAQ/niimaq_errors_legacy.h"
 #define _NIWIN 
 
-static HWND ImaqSmplHwnd;
+static HWND hwnd;
 static HWND         HSnap, HQuit, HIntfName;
 static Int32 AcqWinWidth;
 static Int32 AcqWinHeight;
@@ -55,8 +55,8 @@ int OnGrab(void)
 	imgGrab(sessionID, NULL, TRUE);
 
 	// 6a. imgSessionSaveBufferEx to save a buffer of a session to PNG
-	imgSessionSaveBufferEx(sessionID, NULL, reinterpret_cast<Int8*>(const_cast<char*>("test.png")));
-
+	//imgSessionSaveBufferEx(sessionID, NULL, reinterpret_cast<Int8*>(const_cast<char*>("test.png")));
+	imgSessionSaveBufferEx(sessionID, NULL, reinterpret_cast<Int8*>(0x00000010));
 
 
 	// 6b. get attributes to get pixel depth of camera
@@ -93,7 +93,7 @@ int OnGrab(void)
 
 
 	//            1          2   3  4      5              6           7           8          9
-	imgPlot2(ImaqSmplHwnd, NULL, 0, 0, AcqWinWidth, AcqWinHeight, CanvasLeft, CanvasTop, plotFlag); // ImaqSmplHwnd not established
+	imgPlot2(hwnd, NULL, 0, 0, AcqWinWidth, AcqWinHeight, CanvasLeft, CanvasTop, plotFlag); // ImaqSmplHwnd not established
 
 	return 0;
 }
@@ -141,7 +141,7 @@ int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszA
 	hwnd = CreateWindowEx(
 		0,						// extended possibilities for variation
 		szClassName,			// classname
-		"Weendows App",			// title
+		"IMAQ",			// title
 		WS_OVERLAPPEDWINDOW,	// default window
 		CW_USEDEFAULT,			// windows decides the position
 		CW_USEDEFAULT,			// window location
@@ -208,7 +208,7 @@ LRESULT CALLBACK ImaqSmplProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 	{
 	case WM_CREATE: // ADD ELEMENTS LIKE BUTTONS HERE
 		textfield = CreateWindow("STATIC",
-			"Testing of imgGrab!",
+			"Testing of imgGrab",
 			WS_VISIBLE | WS_CHILD,
 			20, 20, 100, 30,
 			hwnd, NULL, NULL, NULL, NULL);
