@@ -978,7 +978,7 @@ USER_FUNC imgSessionTriggerRead2(SESSION_ID sid, IMG_SIGNAL_TYPE trigType, uInt3
 USER_FUNC imgSessionTriggerRoute2(SESSION_ID sid, IMG_SIGNAL_TYPE srcTriggerType, uInt32 srcTriggerNumber, IMG_SIGNAL_TYPE dstTriggerType, uInt32 dstTriggerNumber);
 USER_FUNC imgSessionTriggerClear(SESSION_ID sid);
 USER_FUNC imgSessionTriggerConfigure2(SESSION_ID sid, IMG_SIGNAL_TYPE trigType, uInt32 trigNum, uInt32 polarity, uInt32 timeout, uInt32 action);
-USER_FUNC imgSessionSaveBufferEx(SESSION_ID sid, void *buffer,Int8* file_name);
+USER_FUNC imgSessionSaveBufferEx(SESSION_ID sid, void *buffer, const char* file_name);
 USER_FUNC imgShowError(IMG_ERR error, Int8* text);
 USER_FUNC imgInterfaceReset(INTERFACE_ID ifid);
 USER_FUNC imgInterfaceQueryNames(uInt32 index, Int8* queryName);

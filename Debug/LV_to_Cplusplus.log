@@ -1,3 +1,5 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (16 Sept CAMERA.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-C:\Users\User.DESKTOP-G63UU5V\Desktop\Labview_to_Cplusplus\main.cpp(214,1): warning C4002: too many arguments for function-like macro invocation 'CreateWindowA'
+C:\Users\User.DESKTOP-G63UU5V\Desktop\Labview_to_Cplusplus\main.cpp(227,1): warning C4002: too many arguments for function-like macro invocation 'CreateWindowA'
+C:\Users\User.DESKTOP-G63UU5V\Desktop\Labview_to_Cplusplus\main.cpp(271,15): warning C4101: 'error': unreferenced local variable
+C:\Users\User.DESKTOP-G63UU5V\Desktop\Labview_to_Cplusplus\main.cpp(473,22): warning C4244: '=': conversion from 'ULONGLONG' to 'uInt32', possible loss of data
